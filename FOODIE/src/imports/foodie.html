@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FOODIE — Discover What to Eat Next</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+body{background:#f7f8f6;color:#222}
+nav{background:#fff;display:flex;justify-content:space-between;align-items:center;padding:18px 7%;border-bottom:1px solid #eee;position:sticky;top:0;z-index:10}
+.logo{font-size:25px;font-weight:bold;color:#2b7a78}.logo span{color:#f4a261}
+.nav-links{display:flex;gap:30px;list-style:none}.nav-links a{text-decoration:none;color:#333;font-size:14px}
+.profile-btn,.primary-btn,.view-btn{background:#2b7a78;color:white;border:0;cursor:pointer}
+.profile-btn{padding:10px 18px;border-radius:20px}
+.hero{min-height:530px;padding:80px 7%;display:flex;align-items:center;background:linear-gradient(rgba(247,248,246,.92),rgba(247,248,246,.92)),url("https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1600&q=80");background-size:cover;background-position:center}
+.hero-text{width:55%}.hero-text small{color:#2b7a78;font-weight:bold;letter-spacing:1px}
+.hero-text h1{font-size:58px;line-height:1.05;margin:15px 0}.hero-text h1 span{color:#2b7a78}
+.hero-text p{font-size:18px;color:#666;line-height:1.6;max-width:570px}
+.hero-buttons{margin-top:30px;display:flex;gap:15px}.primary-btn,.secondary-btn{padding:15px 25px;border-radius:30px;font-size:15px}
+.secondary-btn{background:#fff;color:#2b7a78;border:1px solid #2b7a78;cursor:pointer}
+.search-area{width:86%;margin:-40px auto 60px;background:#fff;border-radius:20px;padding:25px;box-shadow:0 8px 30px rgba(0,0,0,.08)}
+.search-area h3{margin-bottom:15px}.search-box{display:flex;gap:10px}.search-box input{flex:1;padding:15px;border:1px solid #ddd;border-radius:10px;font-size:15px}.search-box button{padding:15px 25px;border:0;background:#f4a261;color:#fff;border-radius:10px;cursor:pointer}
+.section{width:86%;margin:auto;padding:30px 0 70px}.section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}.section-title h2{font-size:30px}.section-title p{color:#777}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:30px}.filter-btn{border:1px solid #ddd;background:#fff;padding:10px 17px;border-radius:20px;cursor:pointer}.filter-btn.active{background:#2b7a78;color:#fff;border-color:#2b7a78}
+.restaurant-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:25px}.restaurant-card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 5px 20px rgba(0,0,0,.06);transition:.3s}.restaurant-card:hover{transform:translateY(-5px)}
+.restaurant-image{height:210px;width:100%;object-fit:cover}.card-content{padding:20px}.card-top{display:flex;justify-content:space-between;align-items:center}.card-content h3{font-size:20px}.rating{color:#f4a261;font-weight:bold}.category{color:#888;font-size:14px;margin:8px 0}.price{color:#2b7a78;font-weight:bold}
+.tags{display:flex;gap:6px;margin:12px 0;flex-wrap:wrap}.tag{font-size:11px;padding:5px 9px;border-radius:10px;background:#edf7f5;color:#2b7a78}.hidden-gem{background:#fff2df;color:#d67a00}.parking{background:#eef3ff;color:#4667b1}
+.card-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:15px}.view-btn{padding:9px 15px;border-radius:8px}
+.parking-section{background:#153f3d;color:#fff;padding:70px 7%;margin-top:30px}.parking-container{max-width:1200px;margin:auto}.parking-container h2{font-size:35px;margin-bottom:10px}.parking-container>p{color:#c8d8d6;margin-bottom:30px}
+.parking-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.parking-card{background:#fff;color:#222;padding:25px;border-radius:18px}.parking-icon{font-size:35px}.parking-card h3{margin:10px 0}.available{color:#2b9b72;font-weight:bold}.limited{color:#e69a27;font-weight:bold}
+.recommendation{background:#fff8ef;padding:70px 7%}.recommendation-container{max-width:1200px;margin:auto}.recommendation-box{background:#fff;padding:30px;border-radius:20px;display:flex;gap:30px;align-items:center;box-shadow:0 5px 20px rgba(0,0,0,.06)}
+.recommendation-box img{width:280px;height:220px;object-fit:cover;border-radius:15px}.recommendation-info h2{font-size:30px;margin-bottom:10px}.recommendation-info p{color:#666;line-height:1.6}.match{display:inline-block;margin:15px 0;background:#2b7a78;color:#fff;padding:8px 14px;border-radius:20px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:30px}.step{text-align:center;padding:30px}.step-number{width:55px;height:55px;margin:auto;background:#2b7a78;color:#fff;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:20px;font-weight:bold}.step h3{margin:15px 0 10px}.step p{color:#777;line-height:1.5}
+footer{background:#102f2d;color:#fff;padding:35px 7%;text-align:center}footer p{color:#b8cecc;margin-top:8px}
+@media(max-width:900px){.hero-text{width:100%}.restaurant-grid,.parking-grid,.steps{grid-template-columns:1fr}.recommendation-box{flex-direction:column}.recommendation-box img{width:100%}.nav-links{display:none}.hero-text h1{font-size:40px}}
+
+.party-overlay{position:fixed;inset:0;background:rgba(16,47,45,.55);display:flex;align-items:center;justify-content:center;z-index:1000}.party-modal{background:#fff;width:min(480px,90%);padding:35px;border-radius:24px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2)}.party-modal h2{font-size:30px;margin-bottom:10px;color:#153f3d}.party-modal p{color:#777;line-height:1.5;margin-bottom:25px}.party-options{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}.party-option{border:1px solid #ddd;background:#fff;padding:14px;border-radius:12px;cursor:pointer}.party-option.selected{background:#2b7a78;color:#fff;border-color:#2b7a78}.party-modal input{width:100%;padding:14px;border:1px solid #ddd;border-radius:10px;margin-bottom:15px}.party-modal .continue-btn{width:100%;padding:14px;border:0;border-radius:12px;background:#2b7a78;color:#fff;font-size:16px;cursor:pointer}.group-note{background:#edf7f5;color:#2b7a78;padding:12px 15px;border-radius:12px;margin-bottom:25px;display:none}.group-note.show{display:block}.parking-detail{margin-top:28px;background:#fff;padding:25px;border-radius:18px;color:#222}.parking-detail h3{margin-bottom:8px}.parking-detail p{color:#777;margin-bottom:18px}.floor-list{display:grid;gap:12px}.floor-row{display:grid;grid-template-columns:70px 1fr 100px;align-items:center;gap:15px;padding:12px;border-radius:12px;background:#f7f8f6}.floor-bar{height:14px;background:#eee;border-radius:20px;overflow:hidden}.floor-fill{height:100%;border-radius:20px}.green-fill{background:#4caf72}.orange-fill{background:#e6a23c}.red-fill{background:#d9534f}.green-text{color:#2b9b72}.orange-text{color:#e69a27}.red-text{color:#d9534f}.foodie-card{width:330px;height:205px;border-radius:22px;padding:25px;background:linear-gradient(135deg,#2b7a78,#153f3d);color:#fff;box-shadow:0 15px 35px rgba(21,63,61,.25)}.card-section{background:#eef7f5;padding:70px 7%}.card-container{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:40px}.card-copy{max-width:600px}.card-copy h2{font-size:35px;margin-bottom:12px}.card-copy p{color:#666;line-height:1.6}.benefits{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}.benefit{background:#fff;padding:9px 13px;border-radius:20px;color:#2b7a78;font-size:13px}.discount-box{margin-top:20px;background:#fff2df;border-left:5px solid #f4a261;padding:16px;border-radius:10px;color:#7a4b0a}.map-btn{display:inline-block;text-decoration:none;background:#f4a261;color:#fff;padding:10px 15px;border-radius:9px;margin-top:12px;font-size:13px}@media(max-width:900px){.card-container{flex-direction:column;align-items:flex-start}.party-options{grid-template-columns:repeat(2,1fr)}.floor-row{grid-template-columns:55px 1fr 80px}}
+</style>
+</head>
+<body><div class="party-overlay" id="partyOverlay"><div class="party-modal"><h2>👋 Welcome to FOODIE</h2><p>Before we recommend a place, tell us how many people are eating with you.</p><div class="party-options"><button class="party-option" onclick="selectParty(1,this)">1</button><button class="party-option" onclick="selectParty(2,this)">2</button><button class="party-option" onclick="selectParty(3,this)">3</button><button class="party-option" onclick="selectParty(4,this)">4+</button></div><input type="number" id="customParty" min="1" placeholder="Or enter the exact number of people"><button class="continue-btn" onclick="saveParty()">Find My Food</button></div></div>
+
+<nav>
+  <div class="logo">FOOD<span>IE</span></div>
+  <ul class="nav-links">
+    <li><a href="#discover">Discover</a></li>
+    <li><a href="#parking">Parking</a></li>
+    <li><a href="#recommendation">For You</a></li>
+    <li><a href="#how">How It Works</a></li>
+  </ul>
+  <button class="profile-btn">My Profile</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-text">
+    <small>YOUR PERSONAL FOOD GUIDE</small>
+    <h1>Not sure what to eat? <span>We've got you.</span></h1>
+    <p>Discover hidden gems, highly-rated restaurants, affordable meals, and places with available parking around Slipi and Central Park.</p>
+    <div class="hero-buttons">
+      <button class="primary-btn" onclick="recommendFood()">Recommend Something</button>
+      <button class="secondary-btn" onclick="scrollToRestaurants()">Explore Restaurants</button>
+    </div>
+  </div>
+</section>
+
+<div class="search-area">
+  <h3>What are you craving?</h3>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Try: Japanese, cheap food, dessert...">
+    <button onclick="searchFood()">Search</button>
+  </div>
+</div>
+
+<section class="section" id="discover">
+  <div class="section-title">
+    <div><h2>Discover Around You</h2><p>Restaurants around Slipi & Central Park</p></div>
+  </div>
+
+  <div class="group-note" id="groupNote">👥 <strong>Group of 4+ detected:</strong> We will prioritize restaurants with larger seating areas and better group dining options.</div>
+
+  <div class="filters">
+    <button class="filter-btn active" onclick="filterFood('all',this)">All</button>
+    <button class="filter-btn" onclick="filterFood('hidden',this)">💎 Hidden Gems</button>
+    <button class="filter-btn" onclick="filterFood('rating',this)">⭐ Highly Rated</button>
+    <button class="filter-btn" onclick="filterFood('cheap',this)">💰 Budget Friendly</button>
+    <button class="filter-btn" onclick="filterFood('parking',this)">🚗 Easy Parking</button>
+  </div>
+
+  <div class="restaurant-grid" id="restaurantGrid">
+
+    <div class="restaurant-card" data-type="hidden cheap parking">
+      <img class="restaurant-image" src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80" alt="Indonesian food">
+      <div class="card-content">
+        <div class="card-top"><h3>Rempah Bistro</h3><span class="rating">⭐ 4.4</span></div>
+        <p class="category">Indonesian • Central Park</p><p class="price">Rp 50K – 100K</p>
+        <div class="tags"><span class="tag hidden-gem">💎 Hidden Gem</span><span class="tag">Indonesian</span><span class="tag parking">🚗 Parking</span><span class="tag">👥 Group Friendly</span></div>
+        <div class="card-bottom"><span>740+ reviews</span><button class="view-btn" onclick="showRestaurant('Rempah Bistro')">View</button></div>
+      </div>
+    </div>
+
+    <div class="restaurant-card" data-type="rating parking">
+      <img class="restaurant-image" src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80" alt="Baia Nonna restaurant">
+      <div class="card-content">
+        <div class="card-top"><h3>Baia Nonna</h3><span class="rating">⭐ 4.9</span></div>
+        <p class="category">Southeast Asian • Tribeca</p><p class="price">Rp 50K – 150K</p>
+        <div class="tags"><span class="tag">⭐ Highly Rated</span><span class="tag parking">🚗 Parking</span></div>
+        <div class="card-bottom"><span>1,100+ reviews</span><button class="view-btn" onclick="showRestaurant('Baia Nonna')">View</button></div>
+      </div>
+    </div>
+
+    <div class="restaurant-card" data-type="rating parking">
+      <img class="restaurant-image" src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=800&q=80" alt="Japanese restaurant">
+      <div class="card-content">
+        <div class="card-top"><h3>Katsukita</h3><span class="rating">⭐ 4.9</span></div>
+        <p class="category">Japanese • Central Park</p><p class="price">Rp 50K – 150K</p>
+        <div class="tags"><span class="tag">⭐ Highly Rated</span><span class="tag">🍱 Japanese</span><span class="tag parking">🚗 Parking</span></div>
+        <div class="card-bottom"><span>4,300+ reviews</span><button class="view-btn" onclick="showRestaurant('Katsukita')">View</button></div>
+      </div>
+    </div>
+
+    <div class="restaurant-card" data-type="rating">
+      <img class="restaurant-image" src="https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=800&q=80" alt="Asian food">
+      <div class="card-content">
+        <div class="card-top"><h3>Song Fa Bak Kut Teh</h3><span class="rating">⭐ 4.8</span></div>
+        <p class="category">Singaporean • Central Park</p><p class="price">Rp 100K – 200K</p>
+        <div class="tags"><span class="tag">⭐ Highly Rated</span><span class="tag">🥘 Singaporean</span></div>
+        <div class="card-bottom"><span>2,100+ reviews</span><button class="view-btn" onclick="showRestaurant('Song Fa Bak Kut Teh')">View</button></div>
+      </div>
+    </div>
+
+    <div class="restaurant-card" data-type="hidden cheap">
+      <img class="restaurant-image" src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80" alt="Food">
+      <div class="card-content">
+        <div class="card-top"><h3>Dandang Gulo</h3><span class="rating">⭐ 4.9</span></div>
+        <p class="category">Indonesian • Palmerah</p><p class="price">Rp 50K – 100K</p>
+        <div class="tags"><span class="tag hidden-gem">💎 Hidden Gem</span><span class="tag">🇮🇩 Nusantara</span></div>
+        <div class="card-bottom"><span>380+ reviews</span><button class="view-btn" onclick="showRestaurant('Dandang Gulo')">View</button></div>
+      </div>
+    </div>
+
+    <div class="restaurant-card" data-type="rating parking">
+      <img class="restaurant-image" src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80" alt="Indonesian restaurant">
+      <div class="card-content">
+        <div class="card-top"><h3>Remboelan</h3><span class="rating">⭐ 4.8</span></div>
+        <p class="category">Indonesian • Central Park</p><p class="price">Rp 75K – 150K</p>
+        <div class="tags"><span class="tag">⭐ Highly Rated</span><span class="tag parking">🚗 Parking</span><span class="tag">👥 Group Friendly</span></div>
+        <div class="card-bottom"><span>3,500+ reviews</span><button class="view-btn" onclick="showRestaurant('Remboelan')">View</button></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="parking-section" id="parking">
+  <div class="parking-container">
+    <h2>Check Parking Before You Go 🚗</h2>
+    <p>Choose your vehicle and see the parking situation before heading to your restaurant.</p>
+
+    <div class="filters">
+      <button class="filter-btn active" onclick="vehicle('car',this)">🚗 Car</button>
+      <button class="filter-btn" onclick="vehicle('motorcycle',this)">🏍️ Motorcycle</button>
+    </div>
+
+    <div class="parking-grid">
+      <div class="parking-card"><div class="parking-icon">🚗</div><h3>Central Park</h3><p>Car Parking</p><span class="available">● Available</span><p>Demo availability by floor</p></div>
+      <div class="parking-card"><div class="parking-icon">🏍️</div><h3>Central Park</h3><p>Motorcycle Parking</p><span class="limited">● Limited</span><p>Demo availability by area</p></div>
+      <div class="parking-card"><div class="parking-icon">🚗</div><h3>Taman Anggrek</h3><p>Car Parking</p><span class="available">● Available</span><p>Demo availability by floor</p></div>
+    </div>
+    <div class="parking-detail"><h3>Central Park — Car Parking</h3><p>Green = more spaces, orange = limited, red = almost full.</p><div class="floor-list"><div class="floor-row"><strong>B1</strong><div class="floor-bar"><div class="floor-fill green-fill" style="width:25%"></div></div><span class="green-text">75% free</span></div><div class="floor-row"><strong>B2</strong><div class="floor-bar"><div class="floor-fill green-fill" style="width:40%"></div></div><span class="green-text">60% free</span></div><div class="floor-row"><strong>B3</strong><div class="floor-bar"><div class="floor-fill orange-fill" style="width:70%"></div></div><span class="orange-text">30% free</span></div><div class="floor-row"><strong>B4</strong><div class="floor-bar"><div class="floor-fill red-fill" style="width:92%"></div></div><span class="red-text">8% free</span></div></div></div>
+  </div>
+</section>
+
+<section class="card-section"><div class="card-container"><div class="foodie-card"><div style="font-size:30px">▦</div><strong style="float:right">FOODIE PASS</strong><div style="margin-top:35px;letter-spacing:2px">••••  ••••  ••••  2026</div><small style="display:block;margin-top:18px;text-transform:uppercase">Your FOODIE Member</small></div><div class="card-copy"><h2>Meet the FOODIE Card 💳</h2><p>Use your FOODIE Card to unlock parking benefits and exclusive restaurant promotions. Partner restaurants can offer discounts through FOODIE, while FOODIE earns revenue from partner promotions and card transactions.</p><div class="benefits"><span class="benefit">🚗 Parking Benefits</span><span class="benefit">🏷️ Exclusive Discounts</span><span class="benefit">🍽️ Restaurant Deals</span><span class="benefit">⭐ Member Rewards</span></div><div class="discount-box"><strong>Example deal:</strong> Get 15% off at selected partner restaurants when you pay with FOODIE Card.</div><br><button class="primary-btn" onclick="applyCard()">Apply for FOODIE Card</button></div></div></section>
+
+<section class="recommendation" id="recommendation">
+  <div class="recommendation-container">
+    <div class="section-title"><div><h2>Your Recommendation</h2><p>Based on rating, price, popularity and hidden-gem potential</p></div></div>
+
+    <div class="recommendation-box">
+      <img id="recommendationImage" src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80" alt="Recommended restaurant">
+      <div class="recommendation-info">
+        <span class="match">94% Match</span>
+        <h2 id="recommendationName">Rempah Bistro</h2>
+        <p id="recommendationText">A great choice if you want Indonesian food, a reasonable price, and something slightly less obvious than the most popular restaurants.</p>
+        <br><p>⭐ 4.4 Rating &nbsp; • &nbsp; 💰 Rp 50K–100K &nbsp; • &nbsp; 💎 Hidden Gem</p>
+        <br><button class="primary-btn" onclick="recommendFood()">🔄 Give Me Another Choice</button> <a class="map-btn" id="recommendationMap" href="https://www.google.com/maps/search/?api=1&query=Rempah+Bistro+Central+Park+Jakarta" target="_blank">📍 Open in Google Maps</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="how">
+  <div class="section-title"><div><h2>How FOODIE Works</h2><p>Finding your next meal in three simple steps.</p></div></div>
+  <div class="steps">
+    <div class="step"><div class="step-number">1</div><h3>Tell Us What You Want</h3><p>Choose your budget, food preference, rating preference, and location.</p></div>
+    <div class="step"><div class="step-number">2</div><h3>We Find Your Match</h3><p>FOODIE compares ratings, prices, distance and hidden-gem potential.</p></div>
+    <div class="step"><div class="step-number">3</div><h3>Check Parking & Go</h3><p>Check parking availability before you leave and enjoy your meal.</p></div>
+  </div>
+</section>
+
+<footer><h2>FOODIE</h2><p>Discover something worth eating.</p><p>Slipi • Central Park • Jakarta</p></footer>
+
+<script>
+let partySize=0,selectedParty=0;
+function selectParty(n,b){selectedParty=n;document.querySelectorAll('.party-option').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');document.getElementById('customParty').value=''}
+function saveParty(){let n=parseInt(document.getElementById('customParty').value)||selectedParty;if(!n){alert('Please choose how many people are eating.');return}partySize=n;document.getElementById('partyOverlay').style.display='none';if(n>3)document.getElementById('groupNote').classList.add('show');recommendFood()}
+function filterFood(type,button){document.querySelectorAll('.restaurant-card').forEach(card=>{let show=type==='all'||card.dataset.type.split(' ').includes(type);if(partySize>3&&type==='all')show=card.innerText.includes('Group Friendly');card.style.display=show?'block':'none'});document.querySelectorAll('#discover .filter-btn').forEach(b=>b.classList.remove('active'));button.classList.add('active')}
+function recommendFood(){const r=[['Rempah Bistro','https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80','A hidden gem for Indonesian food with a reasonable price and a strong rating.','94%','https://www.google.com/maps/search/?api=1&query=Rempah+Bistro+Central+Park+Jakarta'],['Baia Nonna','https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80','A highly-rated choice around Tribeca if you want something comfortable and popular.','91%','https://www.google.com/maps/search/?api=1&query=Baia+Nonna+Tribeca+Central+Park+Jakarta'],['Katsukita','https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=800&q=80','A strong choice when you are craving Japanese food with excellent ratings.','89%','https://www.google.com/maps/search/?api=1&query=Katsukita+Central+Park+Jakarta'],['Dandang Gulo','https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80','A less obvious Indonesian food option with an excellent rating.','96%','https://www.google.com/maps/search/?api=1&query=Dandang+Gulo+Palmerah+Jakarta']];let a=r;if(partySize>3)a=r.filter(x=>x[0]==='Rempah Bistro');let x=a[Math.floor(Math.random()*a.length)];document.getElementById('recommendationName').innerText=x[0];document.getElementById('recommendationText').innerText=partySize>3?x[2]+' This option is also suitable for a larger group.':x[2];document.getElementById('recommendationImage').src=x[1];document.querySelector('.match').innerText=x[3]+' Match';document.getElementById('recommendationMap').href=x[4];document.getElementById('recommendation').scrollIntoView({behavior:'smooth'})}
+function searchFood(){let q=document.getElementById('searchInput').value.toLowerCase();document.querySelectorAll('.restaurant-card').forEach(c=>c.style.display=c.innerText.toLowerCase().includes(q)?'block':'none');document.getElementById('discover').scrollIntoView({behavior:'smooth'})}
+function vehicle(type,button){document.querySelectorAll('#parking .filter-btn').forEach(b=>b.classList.remove('active'));button.classList.add('active');alert(type==='car'?'Car parking selected.':'Motorcycle parking selected.')}
+function showRestaurant(name){if(confirm('Open '+name+' in Google Maps?'))window.open('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(name+' Jakarta'),'_blank')}
+function applyCard(){alert('FOODIE Card application started! In the full app, users would continue to registration and payment.')}
+function scrollToRestaurants(){document.getElementById('discover').scrollIntoView({behavior:'smooth'})}
+</script>
+</body>
+</html>
